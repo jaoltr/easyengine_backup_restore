@@ -8,17 +8,17 @@ echo "name = $git_name" >> /root/.gitconfig
 echo "email = $git_email" >> /root/.gitconfig
 
 ## Set AWS Credentials
-mkdir /root/.aws
-echo "[default]" > /root/.aws/credentials
-echo "aws_access_key_id=$aws_access_key_id" >> /root/.aws/credentials
-echo "aws_secret_access_key=$aws_secret_access_key" >> /root/.aws/credentials
-chmod 400 /root/.aws/credentials
+## mkdir /root/.aws
+## echo "[default]" > /root/.aws/credentials
+## echo "aws_access_key_id=$aws_access_key_id" >> /root/.aws/credentials
+## echo "aws_secret_access_key=$aws_secret_access_key" >> /root/.aws/credentials
+## chmod 400 /root/.aws/credentials
 
 ## Import the public key for backups (restore requires secret private key)
-gpg --import /root/public.key
+## gpg --import /root/public.key
 ## Unable to import private key with password prompt
-#gpg --import --allow-secret-key /root/private.key
-#gpg --import-ownertrust /root/trust.key
+## gpg --import --allow-secret-key /root/private.key
+## gpg --import-ownertrust /root/trust.key
 
 ## Update Ubuntu
 export DEBIAN_FRONTEND=noninteractive
@@ -28,8 +28,8 @@ sudo -E apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--f
 sudo -E apt-get -qy autoclean
 
 ## Install AWS CLI
-apt-get install -y python-pip
-pip install awscli
+## apt-get install -y python-pip
+## pip install awscli
  
 ## Install EasyEngine.io v4
 wget -qO ee rt.cx/ee4 && sudo bash ee
@@ -47,21 +47,21 @@ wget -qO /etc/cron.daily/ee4-backup-sites https://raw.githubusercontent.com/micr
 wget -qO /root/ee4-restore-site https://raw.githubusercontent.com/microram/ee4-tools/master/ee4-restore-site && chmod +x /root/ee4-restore-site
 
 ## Get the v3 restore script. Place in /root
-wget -qO /root/ee4-restore-from-v3-site https://raw.githubusercontent.com/microram/ee4-tools/master/ee4-restore-from-v3-site && chmod +x /root/ee4-restore-from-v3-site
+## wget -qO /root/ee4-restore-from-v3-site https://raw.githubusercontent.com/microram/ee4-tools/master/ee4-restore-from-v3-site && chmod +x /root/ee4-restore-from-v3-site
 
 ## Fix up the settings file
-sed -i -e "s/gpg_pub_email=webmaster@example.com/gpg_pub_email=$gpg_pub_email/g" /root/.ee4-backup-settings.conf
+## sed -i -e "s/gpg_pub_email=webmaster@example.com/gpg_pub_email=$gpg_pub_email/g" /root/.ee4-backup-settings.conf
 sed -i -e "s/le_email=webmaster@example.com/le_email=$le_email/g" /root/.ee4-backup-settings.conf
-sed -i -e "s/bucket=backup-bucket/bucket=$bucket/g" /root/.ee4-backup-settings.conf
+## sed -i -e "s/bucket=backup-bucket/bucket=$bucket/g" /root/.ee4-backup-settings.conf
 sed -i -e "s/server_name=hosting1/server_name=$server_name/g" /root/.ee4-backup-settings.conf
 
 ## Load the settings and Download the newest restorelist
-if [[ -r ~/.ee4-backup-settings.conf ]] ; then
-	. ~/.ee4-backup-settings.conf
-	restorefile=`aws s3 ls s3://$bucket/$server_name/$restorelist_backup_folder/ | awk '{print $4}' | tail -1`
-	aws s3 cp $s3options s3://$bucket/$server_name/$restorelist_backup_folder/$restorefile /root/
-	chmod +x /root/$restorefile
-fi
+## if [[ -r ~/.ee4-backup-settings.conf ]] ; then
+## 	. ~/.ee4-backup-settings.conf
+## 	restorefile=`aws s3 ls s3://$bucket/$server_name/$restorelist_backup_folder/ | awk '{print $4}' | tail -1`
+## 	aws s3 cp $s3options s3://$bucket/$server_name/$restorelist_backup_folder/$restorefile /root/
+## 	chmod +x /root/$restorefile
+## fi
 
 ## Check for reboot after ee install
 if [[ -f /var/run/reboot-required ]]
